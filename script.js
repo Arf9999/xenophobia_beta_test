@@ -228,12 +228,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Authentication & Initialization Flow ---
     async function attemptDecryption(password) {
         try {
-            if (typeof window.encryptedReportData !== 'undefined') {
-                const decryptedHTML = await decryptPayload(window.encryptedReportData, password);
+            if (typeof encryptedReportData !== 'undefined') {
+                const decryptedHTML = await decryptPayload(encryptedReportData, password);
                 reportData = decryptedHTML;
             }
-            if (typeof window.encryptedTldrData !== 'undefined') {
-                const decryptedTLDR = await decryptPayload(window.encryptedTldrData, password);
+            if (typeof encryptedTldrData !== 'undefined') {
+                const decryptedTLDR = await decryptPayload(encryptedTldrData, password);
                 tldrData = JSON.parse(decryptedTLDR);
             }
             // Success: cache credentials and initialize application
@@ -425,7 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Decryption & Auth Flow Execution ---
-    const needsDecryption = (typeof window.encryptedReportData !== 'undefined' || typeof window.encryptedTldrData !== 'undefined');
+    const needsDecryption = (typeof encryptedReportData !== 'undefined' || typeof encryptedTldrData !== 'undefined');
 
     if (needsDecryption) {
         // Create premium login overlay UI
