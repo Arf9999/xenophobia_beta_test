@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             baseKey,
             {
-                name: "AES-GCM",
+                name: "AES-CBC",
                 length: 256
             },
             false,
@@ -51,22 +51,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const saltBytes = hexToBytes(payload.salt);
         const ivBytes = hexToBytes(payload.iv);
         const cipherBytes = hexToBytes(payload.ciphertext);
-        const tagBytes = hexToBytes(payload.tag);
-        
-        const combined = new Uint8Array(cipherBytes.length + tagBytes.length);
-        combined.set(cipherBytes, 0);
-        combined.set(tagBytes, cipherBytes.length);
         
         const key = await deriveKey(password, saltBytes, 100000);
         
         const decryptedBytes = await window.crypto.subtle.decrypt(
             {
-                name: "AES-GCM",
-                iv: ivBytes,
-                tagLength: 128
+                name: "AES-CBC",
+                iv: ivBytes
             },
             key,
-            combined
+            cipherBytes
         );
         
         const decoder = new TextDecoder();
